@@ -5,13 +5,13 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Inner Join - SQL Visualizer</title>
+  <title>Left Join - SQL Visualizer</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 <body>
     <div class="container">
         <div id="input">
-            <h4>INNER JOIN VISUALIZATION</h4>
+            <h4>LEFT JOIN VISUALIZATION</h4>
             <h5>Left Table</h5>
             <textarea style="height: 300px; width: 100%" id="leftTableInput"></textarea>
             <h5>Right Table</h5>
@@ -19,7 +19,7 @@
             <button class="btn btn-primary" onclick="getInput()">Prepare Table</button>
         </div>
         <div id="output" style="display: none">
-            <h5 class="text-center">INNER JOIN VISUALIZATION</h5>
+            <h5 class="text-center">LEFT JOIN VISUALIZATION</h5>
             <div class="row">
                 <div class="col">
                     <div class="text-center">Left Table</div>
@@ -49,7 +49,7 @@
                 </div>
             </div>
             <br/>
-            <button class="btn btn-primary" onclick="visualize()" id="visualizeBtn">Apply Inner Join</button>
+            <button class="btn btn-primary" onclick="visualize()" id="visualizeBtn">Apply Left Join</button>
             <div class="row">
                 <div class="text-center">Result Table</div>
                 <table class="table table-bordered table-condensed" id="resultTable"></table>
@@ -80,12 +80,14 @@
 
             for (let i = 1; i <= leftTableData.rows.length; ++i) {
                 const leftCriteriaValue = leftTableData.rows[i-1][leftCriteriaValueIndex];
+                let foundMatch = false;
                 for (let j = 1; j <= rightTableData.rows.length; ++j) {
                     leftTable.highLightRow(i);
                     rightTable.highLightRow(j, `<p>Left Table <strong>row ${i}</strong> comparing Right Table <strong>row ${j}</strong></p>`);
 
                     const rightCriteriaValue = rightTableData.rows[j-1][rightCriteriaValueIndex];
                     if (leftCriteriaValue === rightCriteriaValue) {
+                        foundMatch = true;
                         leftTable.highLightSuccessRow(i);
                         rightTable.highLightSuccessRow(j, `<p class="text-success">Left Table <strong>row ${i}</strong> matched Right Table <strong>row ${j}</strong></p>`);
                         await sleep(2000);
@@ -100,6 +102,14 @@
                     leftTable.removeHighlightRow(i);
                     rightTable.removeHighlightRow(j, "");
 
+                    resultTable = new Table("resultTable", "description", resultTableData);
+                }
+
+                if (!foundMatch) {
+                    leftTable.highLightSuccessRow(i, `<p class="text-success">Left Table <strong>row ${i}</strong> has no match on Right Table</p>`);
+                    await sleep(2000);
+                    leftTable.removeHighLightSuccessRow(i);
+                    resultTableData.rows.push(leftTableData.rows[i-1]);
                     resultTable = new Table("resultTable", "description", resultTableData);
                 }
             }

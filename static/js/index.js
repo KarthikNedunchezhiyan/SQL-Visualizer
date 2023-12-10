@@ -3,6 +3,13 @@ class Table {
         this.tableReference = document.getElementById(tableID);
         this.descReference = document.getElementById(descId);
         this.hightLightClassName = "table-primary";
+        this.hightLightSuccessClassName = "table-success";
+
+        // sanitize
+        this.tableReference.innerHTML = "";
+        this.descReference.innerHTML = "";
+        // ***
+
         this.makeTable(data);
     }
 
@@ -82,6 +89,22 @@ class Table {
 
     removeHighlightRow(index, desc) {
         this._highLightRow(index, desc,false);
+    }
+
+    _highLightSuccessRow(index, desc, apply = true) {
+        this.showDescription(desc);
+        const trList = this.tableReference.getElementsByTagName("tr");
+
+        if (apply) trList[index].classList.add(this.hightLightSuccessClassName);
+        else trList[index].classList.remove(this.hightLightSuccessClassName);
+    }
+
+    highLightSuccessRow(index, desc) {
+        this._highLightSuccessRow(index, desc);
+    }
+
+    removeHighLightSuccessRow(index, desc) {
+        this._highLightSuccessRow(index, desc,false);
     }
 
     _highLightCoOrd(i, j, desc, apply = true) {
