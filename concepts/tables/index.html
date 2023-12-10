@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tables - SQL Visualizer</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+  <h5>Tables Visualization</h5>
+  <table class="table" id="table">
+    <thead>
+      <tr>
+        <th scope="col">EmployeeID</th>
+        <th scope="col">FirstName</th>
+        <th scope="col">LastName</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>15567</td>
+        <td>Mark</td>
+        <td>Otto</td>
+      </tr>
+      <tr>
+        <td>16761</td>
+        <td>John</td>
+        <td>Smith</td>
+      </tr>
+      <tr>
+        <td>17466</td>
+        <td>Abu</td>
+        <td>Hines</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="text-center text-primary" id="description"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="../../static/js/index.js"></script>
+<script src="../../static/js/helper.js"></script>
+<script>
+  async function main() {
+    const table = new Table("table", "description");
+    const ROW = 4;
+    const COL = 3;
+
+    while (1) {
+      table.highlightTable("table");
+      await sleep(2000);
+      table.removeHighlightTable();
+      for (let i = 0; i < COL; ++i) {
+        table.highLightColumn(i, `column ${i + 1}`);
+        await sleep(1000);
+        table.removeHighlightColumn(i);
+      }
+
+      for (let i = 1; i < ROW; ++i) {
+        table.highLightRow(i, `row ${i}`);
+        await sleep(1000);
+        table.removeHighlightRow(i);
+      }
+
+      for (let i = 1; i < ROW; ++i) {
+        for (let j = 0; j < COL; ++j) {
+          table.highLightCoOrd(i, j, `field ${i}-${j + 1}`);
+          await sleep(1000);
+          table.removeHighLightCoOrd(i, j, `field ${i}-${j + 1}`);
+        }
+      }
+    }
+  }
+
+  main();
+</script>
+</body>
+</html>
