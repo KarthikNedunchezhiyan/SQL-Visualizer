@@ -1,8 +1,36 @@
 class Table {
-    constructor(tableID, descId) {
+    constructor(tableID, descId, data) {
         this.tableReference = document.getElementById(tableID);
         this.descReference = document.getElementById(descId);
         this.hightLightClassName = "table-primary";
+        this.makeTable(data);
+    }
+
+    makeTable(data) {
+        const thead = document.createElement("thead");
+        const tr = document.createElement("tr");
+        for (let i = 0; i < data.head.length; ++i) {
+            const th = document.createElement("th");
+            th.innerText = data.head[i];
+            th.setAttribute("scope", "col");
+            tr.appendChild(th);
+        }
+        thead.appendChild(tr);
+
+        const tbody = document.createElement("tbody");
+
+        for (let i = 0; i < data.rows.length; ++i) {
+            const tr = document.createElement("tr");
+            for (let j = 0; j < data.rows[i].length; ++j) {
+                const td = document.createElement("td");
+                td.innerText = data.rows[i][j];
+                tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+        }
+
+        this.tableReference.appendChild(thead);
+        this.tableReference.appendChild(tbody);
     }
 
     showDescription(desc) {

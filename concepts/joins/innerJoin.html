@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Joins - SQL Visualizer</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div id="input">
+            <h4>Joins Visualization</h4>
+            <h5>Left Table</h5>
+            <textarea style="height: 300px; width: 100%" id="leftTableInput">
+            </textarea>
+            <h5>Right Table</h5>
+            <textarea style="height: 300px; width: 100%" id="rightTableInput">
+            </textarea>
+            <button class="btn btn-primary" onclick="getInput()">Visualize</button>
+        </div>
+        <div id="output" style="display: none">
+            <h5 class="text-center">INNER JOIN VISUALIZATION</h5>
+            <div class="row">
+                <div class="col">
+                    <div class="text-center">Left Table</div>
+                    <table class="table table-bordered" id="leftTable"></table>
+                </div>
+                <div class="col">
+                    <div class="text-center">Right Table</div>
+                    <table class="table table-bordered" id="rightTable"></table>
+                </div>
+            </div>
+            <div class="row" id="description"></div>
+<!--            <br/>-->
+<!--            <br/>-->
+<!--            <hr/>-->
+<!--            <div class="row" id="criteria">-->
+<!--                <div class="row">-->
+<!--                    Criteria 1-->
+<!--                    <div class="col">-->
+<!--                        <input type="text" class="form-control" id="criteriaLeft">-->
+<!--                    </div>-->
+<!--                    <div class="col">-->
+<!--                        <select class="form-select">-->
+<!--                            <option value="0" selected>Equal</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                    <div class="col">-->
+<!--                        <input type="text" class="form-control" id="criteriaRight">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="../../static/js/index.js"></script>
+    <script src="../../static/js/helper.js"></script>
+    <script>
+        async function visualize(leftTable, leftTableData, rightTable, rightTableData) {
+            for (let i = 1; i <= leftTableData.rows.length; ++i) {
+                for (let j = 1; j <= rightTableData.rows.length; ++j) {
+                    leftTable.highLightRow(i);
+                    rightTable.highLightRow(j, `<p>Left Table <strong>row ${i}</strong> comparing Right Table <strong>row ${j}</strong></p>`);
+                    await sleep(1000);
+                    leftTable.removeHighlightRow(i);
+                    rightTable.removeHighlightRow(j, "");
+                }
+            }
+        }
+        function getInput() {
+            document.getElementById("input").style.display = "none";
+            document.getElementById("output").style.display = "block";
+            const leftTableData =  cvtTableDataFromRaw(document.getElementById("leftTableInput").value);
+            const rightTableData =  cvtTableDataFromRaw(document.getElementById("rightTableInput").value);
+            const leftTable = new Table("leftTable", "description", leftTableData);
+            const rightTable = new Table("rightTable", "description", rightTableData);
+
+            visualize(leftTable, leftTableData, rightTable, rightTableData);
+        }
+    </script>
+</body>
+</html>

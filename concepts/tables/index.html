@@ -11,31 +11,7 @@
 <body>
 <div class="container">
   <h5>Tables Visualization</h5>
-  <table class="table" id="table">
-    <thead>
-      <tr>
-        <th scope="col">EmployeeID</th>
-        <th scope="col">FirstName</th>
-        <th scope="col">LastName</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>15567</td>
-        <td>Mark</td>
-        <td>Otto</td>
-      </tr>
-      <tr>
-        <td>16761</td>
-        <td>John</td>
-        <td>Smith</td>
-      </tr>
-      <tr>
-        <td>17466</td>
-        <td>Abu</td>
-        <td>Hines</td>
-      </tr>
-    </tbody>
+  <table class="table table-bordered" id="table">
   </table>
   <div class="text-center text-primary" id="description"></div>
 </div>
@@ -44,9 +20,19 @@
 <script src="../../static/js/helper.js"></script>
 <script>
   async function main() {
-    const table = new Table("table", "description");
-    const ROW = 4;
-    const COL = 3;
+    const tableData = {
+      head: ["EmployeeID", "FirstName", "LastName"],
+      rows: [
+              ["15567", "Mark", "Otto"],
+              ["16761", "John", "Smith"],
+              ["17466", "Abu", "Hines"]
+      ]
+    };
+
+    const ROW = tableData.rows.length + 1;
+    const COL = tableData.head.length;
+
+    const table = new Table("table", "description", tableData);
 
     while (1) {
       table.highlightTable("table");
