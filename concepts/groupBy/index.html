@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Join - SQL Visualizer</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div id="input">
+            <h4>JOIN VISUALIZATION</h4>
+            <h5>Table</h5>
+            <textarea style="height: 300px; width: 100%" id="tableInput"></textarea>
+            <button class="btn btn-primary" onclick="getInput()">Prepare Table</button>
+        </div>
+        <div id="output" style="display: none">
+            <h5 class="text-center">GROUP BY VISUALIZATION</h5>
+            <div class="row">
+                <div class="text-center">Table</div>
+                <table class="table table-bordered table-condensed" id="table"></table>
+            </div>
+            <div class="row" id="description"></div>
+            <hr/>
+            <div class="row">
+                <div class="row">
+                    Criteria
+                    <div class="col">
+                        <input type="text" class="form-control" id="criteria">
+                    </div>
+                </div>
+            </div>
+            <br/>
+            <div class="btn-toolbar" role="toolbar" id="visualizeBtn">
+                <button type="button" class="btn btn-primary" onclick="visualize()">Apply</button>
+            </div>
+            <div class="row">
+                <div class="text-center" id="resultTableTitle"></div>
+                <table class="table table-bordered table-condensed" id="resultTable"></table>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="../../static/js/index.js"></script>
+    <script src="../../static/js/helper.js"></script>
+    <script>
+        let tableData, table, criteria;
+        let resultTableData;
+        let resultTable;
+
+        const groupColorList = [
+            "Orange",
+            "LightCoral",
+            "LightSalmon",
+            "LightBlue",
+            "LightGoldenrodYellow",
+            "LightCyan",
+            "LightSteelBlue",
+            "LightSlateGrey"
+        ]
+
+        async function visualize() {
+            document.getElementById("resultTableTitle").innerText = "Group By Result";
+            criteria = document.getElementById("criteria").value;
+            const criteriaValueIndex = tableData.head.indexOf(criteria);
+            resultTableData = {
+                head: deepClone(tableData.head),
+                rows: deepClone(tableData.rows)
+            };
+
+
+            resultTableData.rows.sort((row1, row2) => row1[criteriaValueIndex] > row2[criteriaValueIndex]);
+
+            resultTable = new Table("resultTable", "description", resultTableData);
+
+            let colorIndex = -1;
+
+            for (let i = 0; i < resultTableData.rows.length; ++i) {
+                if (!i || resultTableData.rows[i][criteriaValueIndex] !== resultTableData.rows[i-1][criteriaValueIndex]) {
+                    ++colorIndex;
+                }
+
+                resultTable.applyCustomColorRow(i + 1, groupColorList[colorIndex]);
+            }
+        }
+        function getInput() {
+            document.getElementById("input").style.display = "none";
+            document.getElementById("output").style.display = "block";
+            tableData =  cvtTableDataFromRaw(document.getElementById("tableInput").value);
+            table = new Table("table", "description", tableData);
+        }
+    </script>
+</body>
+</html>

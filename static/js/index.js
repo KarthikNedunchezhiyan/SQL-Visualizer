@@ -122,4 +122,13 @@ class Table {
     removeHighLightCoOrd(i, j, desc) {
         this._highLightCoOrd(i, j, desc,false);
     }
+
+    applyCustomColorRow(index, color, desc) {
+        this.showDescription(desc);
+        const trList = this.tableReference.getElementsByTagName("tr");
+
+        const children = trList[index].children;
+
+        for (let j = 0; j < children.length; ++j) trList[index].children[j].style.backgroundColor = color;
+    }
 }

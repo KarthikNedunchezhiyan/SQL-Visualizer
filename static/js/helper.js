@@ -16,3 +16,7 @@ function cvtTableDataFromRaw(input) {
 
     return tableData;
 }
+
+function deepClone(target) {
+    return JSON.parse(JSON.stringify(target));
+}
